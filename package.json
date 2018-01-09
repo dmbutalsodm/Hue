@@ -1,6 +1,6 @@
 {
   "name": "hue-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight library to interact with the Phillips Hue REST Api.",
   "main": "index.js",
   "scripts": {
