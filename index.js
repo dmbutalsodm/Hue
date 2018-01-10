@@ -9,6 +9,16 @@ class HueManager {
     constructor() {
         this.selectedBridge = null;
         this.selectedUser = null;
+        this.toThrow = false;
+    }
+    /**
+     * Since the light's settings cannot be changed while it is off, you can opt to throw errors if this is attempted. NOTE: If this app is not the only one controlling the on/off state, the state will not be accurate, and this should stay turned off.
+     * @param {boolean} bool - Whether or not to throw errors.
+     * @return {this}
+     */
+    throwErrors(bool) {
+        this.toThrow = bool;
+        return this;
     }
     /**
      * Finds the bridges on your wifi network.
@@ -56,7 +66,7 @@ class HueManager {
     /**
      * Sets the API username for the bridge.
      * @param {string} username - The name of the device you wish to authorize.
-     * @return {this} The API username for the passed in user.
+     * @return {this}
      */
     setUser(username) {
         this.selectedUser = username;
@@ -84,7 +94,7 @@ class HueManager {
             let dataKeys = Object.keys(data);
             let lightBulbs = [];
             for (let i = 0; i < Object.keys(data).length; i++) {
-                lightBulbs.push(new LightBulb(dataKeys[i], data[dataKeys[i]].name, data[dataKeys[i]].state, this.selectedBridge, this.selectedUser));
+                lightBulbs.push(new LightBulb(dataKeys[i], data[dataKeys[i]].name, data[dataKeys[i]].state, this.selectedBridge, this.selectedUser, this.toThrow));
             }
             return lightBulbs;
         });

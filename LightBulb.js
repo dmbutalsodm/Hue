@@ -9,13 +9,15 @@ class LightBulb {
      * @param {Object} state - An object representing the state of this bulb.
      * @param {string} selectedBridge - The IP adress for the bridge.
      * @param {string} selectedUser - The username for authentication.
+     * @param {boolean} toThrow - Whether or not the lightbulb should throw errors for invalid interactions.
      */
-    constructor(number, name, state, selectedBridge, selectedUser) {
+    constructor(number, name, state, selectedBridge, selectedUser, toThrow) {
         this.number = number;
         this.name = name;
         this.state = state;
         this.selectedBridge = selectedBridge;
         this.selectedUser = selectedUser;
+        this.toThrow = toThrow;
     }
     /**
      * Returns the name of the bulb.
@@ -105,7 +107,7 @@ class LightBulb {
      * @return {this}
      */
     startColorLoop() {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         this.statePutRequest({effect: 'colorloop'});
         return this;
     }
@@ -114,7 +116,7 @@ class LightBulb {
      * @return {this}
      */
     stopColorLoop() {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         this.statePutRequest({effect: 'none'});
         return this;
     }
@@ -135,7 +137,7 @@ class LightBulb {
      * @return {this}
      */
     setColorXY(x, y) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         this.statePutRequest({xy: [x, y]});
         return this;
     }
@@ -147,7 +149,7 @@ class LightBulb {
      * @return {this}
      */
     setColorRGB(red, green, blue) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         red = (Math.min(Math.max(red, 0), 255)) / 255; // 1. Changes all values to be bound between 0 and 255, then makes them decimals of X/255.
         green = (Math.min(Math.max(green, 0), 255)) / 255;
         blue = (Math.min(Math.max(blue, 0), 255)) / 255;
@@ -173,7 +175,7 @@ class LightBulb {
      * @return {this}
      */
     setBrightness(brightness) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (brightness < 0 || brightness > 255) throw new Error('Brightness must be between 0 and 255.');
         this.statePutRequest({bri: brightness});
         return this;
@@ -184,7 +186,7 @@ class LightBulb {
      * @return {this}
      */
     incrementBrightness(change) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (change < -255 || change > 255) throw new Error('Brightness increment must be between -255 and 255.');
         this.statePutRequest({bri_inc: change});
         return this;
@@ -195,7 +197,7 @@ class LightBulb {
      * @return {this}
      */
     setHue(hue) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (hue < 0 || hue > 65535) throw new Error('Hue must be between 0 and 65535.');
         this.statePutRequest({hue: hue});
         return this;
@@ -206,7 +208,7 @@ class LightBulb {
      * @return {this}
      */
     incrementHue(change) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (change < -65535 || change > 65535) throw new Error('Hue increment must be between -65535 and 65535.');
         this.statePutRequest({hue_inc: change});
         return this;
@@ -217,7 +219,7 @@ class LightBulb {
      * @return {this}
      */
     setColorTemperature(ct) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (ct < 0 || ct > 65535) throw new Error('Color temperature must be between 0 and 65535.');
         this.statePutRequest({ct: ct});
         return this;
@@ -228,7 +230,7 @@ class LightBulb {
      * @return {this}
      */
     incrementColorTemperature(change) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (change < -65535 || change > 65535) throw new Error('Color temperature increment must be between -65535 and 65535.');
         this.statePutRequest({ct_inc: change});
         return this;
@@ -239,7 +241,7 @@ class LightBulb {
      * @return {this}
      */
     setSaturation(saturation) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (saturation < 0 || saturation > 255) throw new Error('Saturation must be between 0 and 255.');
         this.statePutRequest({sat: saturation});
         return this;
@@ -250,7 +252,7 @@ class LightBulb {
      * @return {this}
      */
     incrementSaturation(change) {
-        if (!this.isOn()) throw new Error('You cannot change a light\'s settings while it is off.');
+        if (!this.isOn() && this.toThrow) throw new Error('You cannot change a light\'s settings while it is off.');
         if (change < -255 || change > 255) throw new Error('Saturation increment must be between -255 and 255.');
         this.statePutRequest({sat_inc: change});
         return this;

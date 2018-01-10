@@ -26,15 +26,17 @@ hm.getAllLights().then((allBulbs) => {
 Gets all the lights from the hue, and then turns all them on.
 ```javascript
 hm.getLightsByName('Kitchen1').then((bulbs) => {
-    try {
-        bulbs[0].setSaturation(255);
-    } catch (e) {
-        bulbs[0].turnOn();
-    }
+    bulbs[0].turnOn();
+});
+
+hm.getLightsByName(/Kitchen./).then((bulbs) => {
+    bulbs[0].turnOn();
+    bulbs[1].turnOn();
+    bulbs[2].turnOn();
 });
 ```
 Searching for lights by name. Instead of using a string, you can also use a regex pattern. 
-##### Note: Because the hue does not allow the colour, temperature, saturation, or brightness of a light to be interacted with while the light is off, doing so will throw an error.
+##### Note: Because the hue does not allow the colour, temperature, saturation, or brightness of a light to be interacted with while the light is off, you can enable error throwing if attempted by using `hm.throwErrors(true);`.
 
 ```javascript
 hm.getLightsByGroupName('Kitchen').then((data) => {
